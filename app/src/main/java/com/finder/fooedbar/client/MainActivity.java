@@ -510,7 +510,9 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         @Override
         protected void onPostExecute(final Boolean success) {
             showProgress(false);
-            startActivity(new Intent(MainActivity.this, SuggestionsActivity.class));
+            Intent i = new Intent(getBaseContext(), SuggestionsActivity.class);
+            i.putExtra("SUGGESTIONS", resSug.getRestaurants());
+            startActivity(i);
         }
 
     }

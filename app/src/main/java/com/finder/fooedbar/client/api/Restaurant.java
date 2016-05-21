@@ -2,11 +2,16 @@ package com.finder.fooedbar.client.api;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by svarlamov on 21/5/2016.
  */
 
-public class Restaurant {
+public class Restaurant implements Serializable {
+
+    public static final long serialVersionUID = 2L;
+
     private int id;
     private String name;
     private String description;
@@ -38,5 +43,9 @@ public class Restaurant {
         this.imageUrl = imageUrl;
         this.imageWidth = imageWidth;
         this.sessionId = sessionId;
+    }
+
+    public String getName() {
+        return name;
     }
 }
