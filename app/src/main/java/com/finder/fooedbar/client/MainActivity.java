@@ -1,6 +1,7 @@
 package com.finder.fooedbar.client;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -166,6 +167,23 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             Glide.with(MainActivity.this).load(parkingList.get(position).getImagePath()).into(viewHolder.cardImage);
 
             return rowView;
+        }
+    }
+
+
+    // Sasha look here - ASYNCTASK
+    public class HTTPRequest extends AsyncTask<Void, Void, Data> {
+
+        protected Data doInBackground(Void... params) {
+            //A firebaseError will occur whenever the authentication fails.
+//            ref = new Firebase("https://anchronize.firebaseio.com");
+            return new Data(null, null);
+
+        }
+
+        @Override
+        protected void onCancelled() {
+
         }
     }
 }
