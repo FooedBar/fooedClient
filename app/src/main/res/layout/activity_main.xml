@@ -7,6 +7,14 @@
     tools:context=".client.MainActivity">
 
 
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
+
     <!-- activity view -->
     <FrameLayout
         android:layout_width="match_parent"
@@ -21,6 +29,13 @@
             android:layout_height="match_parent"
             android:background="@drawable/background"
             app:rotation_degrees="15.5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nom!"
+            android:id="@+id/nom_button"
+            android:layout_gravity="center_horizontal|bottom" />
 
     </FrameLayout>
 

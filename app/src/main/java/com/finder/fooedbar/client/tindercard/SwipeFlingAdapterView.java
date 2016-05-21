@@ -13,6 +13,7 @@ import android.widget.Adapter;
 import android.widget.FrameLayout;
 
 import com.finder.fooedbar.R;
+import com.finder.fooedbar.client.MainActivity;
 
 /**
  * Adapted by jasonlin on 5/21/16.
@@ -29,7 +30,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
     private int MIN_ADAPTER_STACK = 6;
     private float ROTATION_DEGREES = 15.f;
 
-    private Adapter mAdapter;
+    public Adapter mAdapter;
     private int LAST_OBJECT_IN_STACK = 0;
     private onFlingListener mFlingListener;
     private AdapterDataSetObserver mDataSetObserver;
@@ -38,7 +39,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
     private OnItemClickListener mOnItemClickListener;
     private FlingCardListener flingCardListener;
     private PointF mLastTouchPoint;
-
+    private MainActivity parent;
 
     public SwipeFlingAdapterView(Context context) {
         this(context, null);
@@ -56,6 +57,10 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         MIN_ADAPTER_STACK = a.getInt(R.styleable.SwipeFlingAdapterView_min_adapter_stack, MIN_ADAPTER_STACK);
         ROTATION_DEGREES = a.getFloat(R.styleable.SwipeFlingAdapterView_rotation_degrees, ROTATION_DEGREES);
         a.recycle();
+    }
+
+    public void setParentActivity(MainActivity context) {
+        this.parent = context;
     }
 
 
@@ -103,6 +108,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
 
         if (adapterCount == 0) {
             removeAllViewsInLayout();
+//            startActivity(new Intent(MainActivity.this, HomeActivity.class));
         } else {
             View topCard = getChildAt(LAST_OBJECT_IN_STACK);
             if (mActiveCard != null && topCard != null && topCard == mActiveCard) {
@@ -127,8 +133,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         if (adapterCount <= MIN_ADAPTER_STACK) mFlingListener.onAdapterAboutToEmpty(adapterCount);
     }
 
-
-    private void layoutChildren(int startingIndex, int adapterCount) {
+    public void layoutChildren(int startingIndex, int adapterCount) {
         while (startingIndex < Math.min(adapterCount, MAX_VISIBLE)) {
             View newUnderChild = mAdapter.getView(startingIndex, null, this);
             if (newUnderChild.getVisibility() != GONE) {
@@ -209,7 +214,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
     /**
      * Set the top view and add the fling listener
      */
-    private void setTopView() {
+    public void setTopView() {
         if (getChildCount() > 0) {
 
             mActiveCard = getChildAt(LAST_OBJECT_IN_STACK);
@@ -309,6 +314,8 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
 
 
     public interface onFlingListener {
+        void expandFirstObjectInAdapter();
+
         void removeFirstObjectInAdapter();
 
         void onLeftCardExit(Object dataObject);
