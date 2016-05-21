@@ -1,5 +1,6 @@
 package com.finder.fooedbar.client.api;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -28,19 +29,35 @@ public class RandomItems {
             return;
         }
         // TODO: Need to implement server-side endpoint for this too
-        JSONObject resp = this.httpUtils.makeJsonGetRequest("v0/menuItems/1");
-        MenuItem dummy = new MenuItem(sessionId);
-        dummy.restaurantId = resp.getInt("restaurantId");
-        dummy.imageUrl = resp.getString("imageUrl");
-        dummy.imageHeight = resp.getInt("imageHeight");
-        dummy.imageWidth = resp.getInt("imageWidth");
-        dummy.id = resp.getInt("id");
-        dummy.name = resp.getString("name");
-        dummy.description = resp.getString("description");
-        // TODO: If len of items received is less than limit, no more items available
-        //       this.existMore = false
-        this.offset += this.limit;
-        return;
+        JSONObject resp = this.httpUtils.makeJsonGetRequest("v0/menuItems?limit=" + limit + "&offset=" + offset);
+        JSONArray items = resp.getJSONArray("items");
+        for (int i = 0; i < items.length(); i++) {
+            JSONObject obj = items.getJSONObject(i);
+            MenuItem temp = new MenuItem(sessionId);
+            temp.restaurantId = obj.getInt("restaurantId");
+            temp.imageUrl = obj.getString("imageUrl");
+            temp.imageHeight = obj.getInt("imageHeight");
+            temp.imageWidth = obj.getInt("imageWidth");
+            temp.id = obj.getInt("id");
+            temp.name = obj.getString("name");
+            temp.description = obj.getString("description");
+            boolean exists = false;
+            for (int j = 0; j < this.items.size(); j++) {
+                if (this.items.get(j).id == temp.id) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists == false) {
+                this.items.add(temp);
+            }
+        }
+
+        if (items.length() < this.limit) {
+            this.existMore = false;
+        } else {
+            this.offset += this.limit;
+        }
     }
 
     public MenuItem getMenuItem(int index) {
