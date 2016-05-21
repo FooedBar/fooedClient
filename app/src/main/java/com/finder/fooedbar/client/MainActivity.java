@@ -477,6 +477,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 } else {
                     Log.d("checkNull", ml.toString());
                     initializeMenuListAdapter();
+                    flingContainer.onResultsReceived();
 
                 }
             }

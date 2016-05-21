@@ -135,9 +135,42 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         if (adapterCount <= MIN_ADAPTER_STACK) mFlingListener.onAdapterAboutToEmpty(adapterCount);
     }
 
+    public void onResultsReceived() {
+
+        mInLayout = true;
+        final int adapterCount = mAdapter.getCount();
+
+        if (adapterCount == 0) {
+            removeAllViewsInLayout();
+//            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+        } else {
+            View topCard = getChildAt(LAST_OBJECT_IN_STACK);
+            if (mActiveCard != null && topCard != null && topCard == mActiveCard) {
+                if (this.flingCardListener.isTouching()) {
+                    PointF lastPoint = this.flingCardListener.getLastPoint();
+                    if (this.mLastTouchPoint == null || !this.mLastTouchPoint.equals(lastPoint)) {
+                        this.mLastTouchPoint = lastPoint;
+                        removeViewsInLayout(0, LAST_OBJECT_IN_STACK);
+                        layoutChildren(1, adapterCount);
+                    }
+                }
+            } else {
+                // Reset the UI and set top view listener
+                removeAllViewsInLayout();
+                layoutChildren(0, adapterCount);
+                setTopView();
+            }
+        }
+
+        mInLayout = false;
+
+        if (adapterCount <= MIN_ADAPTER_STACK) mFlingListener.onAdapterAboutToEmpty(adapterCount);
+    }
+
+
+
     public void layoutChildren(int startingIndex, int adapterCount) {
         while (startingIndex < Math.min(adapterCount, MAX_VISIBLE)) {
-            Log.d("debug", "daniel");
             View newUnderChild = mAdapter.getView(startingIndex, null, this);
             if (newUnderChild.getVisibility() != GONE) {
                 makeAndAddView(newUnderChild);
@@ -293,6 +326,10 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         if (mAdapter != null && mDataSetObserver == null) {
             mDataSetObserver = new AdapterDataSetObserver();
             mAdapter.registerDataSetObserver(mDataSetObserver);
+        }
+        Log.d("debug", "adaptor set");
+        if (mAdapter == null) {
+            Log.d("debug", "CC");
         }
     }
 
