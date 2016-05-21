@@ -1,5 +1,7 @@
 package com.finder.fooedbar.client.api;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,9 +21,12 @@ public class RandomItems {
 
     public RandomItems(int sessionId) throws Exception {
         super();
+        Log.d("debug", sessionId+"bye");
         this.sessionId = sessionId;
         this.httpUtils = new JsonHttpUtils(this.sessionId);
+        Log.d("debug", "gets right before fetchCurrentPage");
         this.fetchCurrentPage();
+        Log.d("debug", "gets right after fetchCurrentPage");
     }
 
     public void fetchCurrentPage() throws Exception {
@@ -29,7 +34,9 @@ public class RandomItems {
             return;
         }
         // TODO: Need to implement server-side endpoint for this too
+        Log.d("debug", "gets before this shit");
         JSONObject resp = this.httpUtils.makeJsonGetRequest("v0/menuItems?limit=" + limit + "&offset=" + offset);
+        Log.d("debug", "gets through this shit");
         JSONArray items = resp.getJSONArray("items");
         for (int i = 0; i < items.length(); i++) {
             JSONObject obj = items.getJSONObject(i);
@@ -60,6 +67,10 @@ public class RandomItems {
         }
     }
 
+    public Boolean hasMore() {
+        return this.existMore;
+    }
+
     public MenuItem getMenuItem(int index) {
         return this.items.get(index);
     }
@@ -71,5 +82,9 @@ public class RandomItems {
 
     public int size() {
         return this.items.size();
+    }
+
+    public ArrayList<MenuItem> getItems() {
+        return this.items;
     }
 }

@@ -1,11 +1,8 @@
 package com.finder.fooedbar.client.api;
 
-import org.json.JSONObject;
+import android.util.Log;
 
-import java.io.BufferedOutputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import org.json.JSONObject;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -32,6 +29,7 @@ public class JsonHttpUtils {
     }
 
     public JSONObject makeJsonPostRequest(String urlSuffix, JSONObject b) throws Exception {
+        Log.d("debug", sessionId+"hi");
         RequestBody body = RequestBody.create(jsonType, b.toString());
         Request request = new Request.Builder()
                 .url(baseApiUrl + urlSuffix)
@@ -46,13 +44,17 @@ public class JsonHttpUtils {
     public JSONObject makeJsonGetRequest(String urlSuffix) throws Exception {
         Request request = new Request.Builder()
                 .url(baseApiUrl + urlSuffix)
+                .addHeader("X-SESSION-ID", sessionId)
                 .build();
+
         Response response = client.newCall(request).execute();
+//        Log.d("debug", response.body().string());
         JSONObject wrapper = new JSONObject(response.body().string());
         return wrapper.getJSONObject("data");
     }
 
     public void setSessionId(int sId) {
         this.sessionId = ((Integer)sId).toString();
+
     }
 }

@@ -7,6 +7,7 @@ import android.database.DataSetObserver;
 import android.graphics.PointF;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Adapter;
@@ -100,6 +101,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         super.onLayout(changed, left, top, right, bottom);
         // if we don't have an adapter, we don't need to do anything
         if (mAdapter == null) {
+            Log.d("debug", "Adapter is null");
             return;
         }
 
@@ -135,6 +137,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
 
     public void layoutChildren(int startingIndex, int adapterCount) {
         while (startingIndex < Math.min(adapterCount, MAX_VISIBLE)) {
+            Log.d("debug", "daniel");
             View newUnderChild = mAdapter.getView(startingIndex, null, this);
             if (newUnderChild.getVisibility() != GONE) {
                 makeAndAddView(newUnderChild);

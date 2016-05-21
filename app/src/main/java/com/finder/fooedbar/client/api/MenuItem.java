@@ -31,4 +31,11 @@ public class MenuItem {
         selection.postSelection(utils);
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public String getImagePath() {
+        return this.imageUrl;
+    }
 }

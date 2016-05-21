@@ -12,6 +12,7 @@ public class Session {
     private double lng;
     private boolean isCreated = false;
 
+    // make the request to create session
     public Session(double la, double lg) throws Exception {
         this.lat = la;
         this.lng = lg;
@@ -39,5 +40,6 @@ public class Session {
 
     public void setId(int id) {
         this.id = id;
+        this.isCreated = true;
     }
 }
