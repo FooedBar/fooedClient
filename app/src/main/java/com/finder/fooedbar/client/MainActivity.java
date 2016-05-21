@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.finder.fooedbar.R;
 import com.finder.fooedbar.client.api.MenuItem;
 import com.finder.fooedbar.client.api.RandomItems;
+import com.finder.fooedbar.client.api.RestaurantSuggestions;
 import com.finder.fooedbar.client.api.Session;
 import com.finder.fooedbar.client.tindercard.FlingCardListener;
 import com.finder.fooedbar.client.tindercard.SwipeFlingAdapterView;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     private FetchRestaurantTask mNomTask;
     private RandomItems ri;
     private Session curr;
+    private RestaurantSuggestions resSug;
 //    private Session curr;
 //    private JsonHttpUtils connection;
 
@@ -292,6 +294,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 @Override
                 public void onLeftCardExit(Object dataObject) {
                     Log.d("NOPE", ml.get(0).getName() + " is swiped left");
+                    new SelectionTask(ml.get(0)).execute(false);
+
                     ml.remove(0);
     //                        al.remove(0);
                     myAppAdapter.notifyDataSetChanged();
@@ -303,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
                 @Override
                 public void onRightCardExit(Object dataObject) {
+                    new SelectionTask(ml.get(0)).execute(true);
 
                     ml.remove(0);
     //                        al.remove(0);
@@ -490,9 +495,13 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                Thread.sleep(5000);
+//                Thread.sleep(5000);
+                resSug = new RestaurantSuggestions(curr.getId());
+                resSug.getSuggestions();
                 Log.d("ASYNC", "running inside FetchRestaurantTask");
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             // fetch the data
@@ -504,6 +513,38 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             startActivity(new Intent(MainActivity.this, SuggestionsActivity.class));
         }
 
+    }
+
+    class SelectionTask extends AsyncTask<Boolean, Void, Boolean> {
+
+        private MenuItem toDelete;
+
+        SelectionTask(MenuItem toDel) {
+            toDelete = toDel;
+        }
+
+        @Override
+        protected Boolean doInBackground(Boolean... isLike) {
+            try {
+                toDelete.callInSelection(ri.getHttpUtils(), isLike[0]);
+                Log.d("debug", "passed SelectionTask");
+
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+//            Log.d("debug", "successfully obtains session");
+
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+//            if (success) {
+//                ml.remove(toDelete);
+//                myAppAdapter.notifyDataSetChanged();
+//            }
+        }
     }
 
 

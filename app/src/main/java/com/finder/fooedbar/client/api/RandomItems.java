@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class RandomItems {
     private ArrayList<MenuItem> items = new ArrayList<>();
     private JsonHttpUtils httpUtils = null;
-    private int limit = 10;
+    private int limit = 30;
     private int offset = 0;
     private boolean existMore = true;
     private int sessionId;
@@ -25,7 +25,7 @@ public class RandomItems {
         this.sessionId = sessionId;
         this.httpUtils = new JsonHttpUtils(this.sessionId);
         Log.d("debug", "gets right before fetchCurrentPage");
-        this.fetchCurrentPage();
+//        this.fetchCurrentPage();
         Log.d("debug", "gets right after fetchCurrentPage");
     }
 
@@ -86,5 +86,9 @@ public class RandomItems {
 
     public ArrayList<MenuItem> getItems() {
         return this.items;
+    }
+
+    public JsonHttpUtils getHttpUtils() {
+        return this.httpUtils;
     }
 }

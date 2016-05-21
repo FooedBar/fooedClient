@@ -38,4 +38,8 @@ public class RestaurantSuggestions {
     public Restaurant get(int index) {
         return this.restaurants.get(index);
     }
+
+    public ArrayList<Restaurant> getRestaurants() {
+        return restaurants;
+    }
 }
