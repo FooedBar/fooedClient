@@ -27,6 +27,7 @@ dependencies {
     compile(name:'common', ext:'aar')
     compile(name:'base', ext:'aar')
     compile 'com.github.bumptech.glide:glide:3.5.1'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
 }
 
