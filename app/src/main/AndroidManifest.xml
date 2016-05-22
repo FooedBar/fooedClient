@@ -2,17 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.finder.fooedbar">
 
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="22" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- Make accelerometer and gyroscope hard requirements for good head tracking. -->
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
-    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.gyroscope"
+        android:required="true" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
-    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="22"/>
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".FooedBarApplication"
@@ -24,21 +35,21 @@
         <activity android:name=".client.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".client.MainActivity" >
+        <activity android:name=".client.MainActivity">
             <intent-filter>
                 <category android:name="com.google.intent.category.CARDBOARD" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".client.SuggestionsActivity"
-                  android:label="Restaurant Suggestions" >>
+        <activity
+            android:name=".client.SuggestionsActivity"
+            android:label="Restaurant Suggestions">
+            >
         </activity>
-
+        <activity android:name=".client.RestaurantDetailActivity"></activity>
     </application>
 
 </manifest>
