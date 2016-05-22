@@ -1,7 +1,7 @@
 package com.finder.fooedbar.client;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,13 +10,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
+import android.os.Vibrator;
 
 import com.finder.fooedbar.R;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -30,6 +29,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private VrPanoramaView.Options panoOptions = new VrPanoramaView.Options();
     private ImageLoaderTask backgroundImageLoaderTask;
     private boolean loadImageSuccessful;
+    private Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
+        panoWidgetView.setEventListener(new ActivityEventListener());
         handleIntent(getIntent());
     }
 
@@ -100,14 +101,12 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
+
     class ImageLoaderTask extends AsyncTask<Pair<Uri, VrPanoramaView.Options>, Void, Boolean> {
-
         private String imageUrl;
-
         public ImageLoaderTask(String url) {
             this.imageUrl = url;
         }
-
         /**
          * Reads the bitmap from disk in the background and waits until it's loaded by pano widget.
          */
@@ -116,10 +115,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             VrPanoramaView.Options panoOptions = null;  // It's safe to use null VrPanoramaView.Options.
             InputStream istr = null;
             try {
-              istr = new URL(imageUrl).openStream();
+                istr = new URL(imageUrl).openStream();
 //                istr = new URL("http://viewer.spherecast.org/photosphere.jpg").openStream();
                 panoOptions = new VrPanoramaView.Options();
-                panoOptions.inputType = VrPanoramaView.Options.TYPE_STEREO_OVER_UNDER;
+                panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
             } catch (IOException e) {
                 Log.e(TAG, "Could not decode default bitmap: " + e);
                 return false;
@@ -130,7 +129,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.e(TAG, "Could not close input stream: " + e);
             }
-
             return true;
         }
     }
@@ -154,6 +152,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     RestaurantDetailActivity.this, "Error loading pano: " + errorMessage, Toast.LENGTH_LONG)
                     .show();
             Log.e(TAG, "Error loading pano: " + errorMessage);
+        }
+
+        @Override
+        public void onClick() {
+            v.vibrate(500);
+            Log.d("debug", "clicked");
+            finish();
         }
     }
 }
