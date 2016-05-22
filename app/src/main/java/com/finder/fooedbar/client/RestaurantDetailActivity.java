@@ -29,7 +29,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private VrPanoramaView.Options panoOptions = new VrPanoramaView.Options();
     private ImageLoaderTask backgroundImageLoaderTask;
     private boolean loadImageSuccessful;
-    private Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    private Vibrator v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,9 +156,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         @Override
         public void onClick() {
+            v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             v.vibrate(500);
             Log.d("debug", "clicked");
-            finish();
+            onBackPressed();
         }
     }
 }
