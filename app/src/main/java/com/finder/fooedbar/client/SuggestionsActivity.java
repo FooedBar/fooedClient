@@ -4,10 +4,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finder.fooedbar.R;
 import com.finder.fooedbar.client.api.Restaurant;
@@ -47,6 +52,13 @@ public class SuggestionsActivity extends AppCompatActivity{
             MyListAdaper la = new MyListAdaper(getApplicationContext(), R.layout.restaurant_list_item, restaurants);
             final ListView SuggestionsListView = (ListView) findViewById(R.id.mylist);
             SuggestionsListView.setAdapter(la);
+            SuggestionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // Sasha & Daniel look here
+                    Log.d("debug", "hello world");
+                }
+            });
         }
 
     }
@@ -62,31 +74,32 @@ public class SuggestionsActivity extends AppCompatActivity{
             layout = resource;
         }
 
-//        @Override
-//        public View getView(final int position, View convertView, ViewGroup parent) {
-//            ViewHolder mainViewholder = null;
-//
-//            if (convertView == null) {
-//                LayoutInflater inflater = LayoutInflater.from(getContext());
-//                convertView = inflater.inflate(layout, parent, false);
-//                ViewHolder viewHolder = new ViewHolder();
-//                viewHolder.title = (TextView) convertView.findViewById(R.id.list_item_title);
-//                viewHolder.button = (ImageButton) convertView.findViewById(R.id.list_item_btn_right);
-//                convertView.setTag(viewHolder);
-//            }
-//            mainViewholder = (ViewHolder) convertView.getTag();
-//            mainViewholder.button.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            String str = getItem((position));
-//            String[] split = str.split("\\*");
-//            String eventName = split[0];
-//            mainViewholder.title.setText(eventName);
-//            return convertView;
-//        }
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder mainViewholder = null;
+
+            if (convertView == null) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                convertView = inflater.inflate(layout, parent, false);
+                ViewHolder viewHolder = new ViewHolder();
+                viewHolder.title = (TextView) convertView.findViewById(R.id.list_item_title);
+                viewHolder.button = (ImageButton) convertView.findViewById(R.id.list_item_btn_right);
+                convertView.setTag(viewHolder);
+            }
+            mainViewholder = (ViewHolder) convertView.getTag();
+            mainViewholder.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("debug", "restaurant item is clicked");
+                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
+                }
+            });
+            String str = getItem((position)).getName();
+            String[] split = str.split("\\*");
+            String eventName = split[0];
+            mainViewholder.title.setText(eventName);
+            return convertView;
+        }
 
         public class ViewHolder {
 
