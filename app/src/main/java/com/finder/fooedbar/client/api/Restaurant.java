@@ -52,4 +52,8 @@ public class Restaurant implements Serializable {
     public String getName() {
         return name;
     }
+
+    public int getID() {
+        return id;
+    }
 }

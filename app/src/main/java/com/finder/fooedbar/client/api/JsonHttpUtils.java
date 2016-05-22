@@ -42,14 +42,17 @@ public class JsonHttpUtils {
     }
 
     public JSONObject makeJsonGetRequest(String urlSuffix) throws Exception {
+        Log.d("url suffix", urlSuffix);
         Request request = new Request.Builder()
                 .url(baseApiUrl + urlSuffix)
                 .addHeader("X-SESSION-ID", sessionId)
                 .build();
+        Log.d("debug request", request.toString());
 
         Response response = client.newCall(request).execute();
-//        Log.d("debug", response.body().string());
-        JSONObject wrapper = new JSONObject(response.body().string());
+        String temp = response.body().string();
+        Log.d("debug", temp);
+        JSONObject wrapper = new JSONObject(temp);
         return wrapper.getJSONObject("data");
     }
 

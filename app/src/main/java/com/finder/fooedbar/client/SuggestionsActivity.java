@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.finder.fooedbar.R;
 import com.finder.fooedbar.client.api.Restaurant;
@@ -36,9 +35,11 @@ public class SuggestionsActivity extends AppCompatActivity{
         restaurants = null;
     }
 
-    void openRestaurant(String url) {
+    void openRestaurant(String url, int resID, String resName) {
         Intent intent = new Intent(this, RestaurantDetailActivity.class);
         intent.putExtra("URL", url);
+        intent.putExtra("ID", resID);
+        intent.putExtra("NAME", resName);
         startActivity(intent);
     }
 
@@ -62,7 +63,7 @@ public class SuggestionsActivity extends AppCompatActivity{
             SuggestionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    openRestaurant(restaurants.get(position).getUrl());
+                    openRestaurant(restaurants.get(position).getUrl(), restaurants.get(position).getID(), restaurants.get(position).getName());
                     Log.d("debug", "hello world");
                 }
             });

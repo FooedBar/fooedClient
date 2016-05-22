@@ -19,6 +19,13 @@ public class MenuItem {
         this.setSessionId(sessionId);
     }
 
+    public MenuItem(int sessionId, int restaurantId, String imageUrl, String name) {
+        this.sessionId = sessionId;
+        this.restaurantId = restaurantId;
+        this.imageUrl = imageUrl;
+        this.name = name;
+    }
+
     public void setSessionId(int id) {
         sessionId = id;
     }

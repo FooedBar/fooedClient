@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.finder.fooedbar.FooedBarApplication;
 import com.finder.fooedbar.R;
 import com.finder.fooedbar.client.api.MenuItem;
 import com.finder.fooedbar.client.api.RandomItems;
@@ -58,219 +59,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         flingContainer.setParentActivity(this);
 
         new FetchSessionIDTask().execute();
-
-        // TODO: open connection with server, get data
-//        if (true) {
-//            Log.d("debug", "enters getsession");
-//            Session curr = ((FooedBarApplication)getApplication()).getCurrentSession();
-//            Session curr = null;
-//                try {
-//                    curr = new Session(22.309638, 114.2245);
-//
-//                    Log.d("debug", "successfully obtains session");
-//                    ri = new RandomItems(curr.getId());
-//                    while (ri.hasMore()) {
-//                        ri.fetchCurrentPage();
-//                    }
-//                    ml = ri.getItems();
-//
-//                    if (ml == null) {
-//                        Log.d("checkNull", "menuList received is null");
-//                    }
-//                    else {
-//                        Log.d("checkNull", ml.toString());
-//
-//                    }
-
-//                myAppAdapter = new MyAppAdapter(ml, MainActivity.this);
-//                flingContainer.setAdapter(myAppAdapter);
-//                flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-//                    @Override
-//                    public void removeFirstObjectInAdapter() {
-//
-//                    }
-//
-//                    @Override
-//                    public void expandFirstObjectInAdapter() {
-//                        // TODO: Animation
-//
-//                    }
-//
-//                    @Override
-//                    public void onLeftCardExit(Object dataObject) {
-//                        Log.d("NOPE", al.get(0).getDescription() + " is swiped left");
-//                        ml.remove(0);
-////                        al.remove(0);
-//                        myAppAdapter.notifyDataSetChanged();
-//                        //Do something on the left!
-//                        //You also have access to the original object.
-//                        //If you want to use it just cast it (String) dataObject
-//
-//                    }
-//
-//                    @Override
-//                    public void onRightCardExit(Object dataObject) {
-//
-//                        ml.remove(0);
-////                        al.remove(0);
-//                        myAppAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onAdapterAboutToEmpty(int itemsInAdapter) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onScroll(float scrollProgressPercent) {
-//
-//                        View view = flingContainer.getSelectedView();
-//                        view.findViewById(R.id.background).setAlpha(0);
-//                        view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-//                        view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
-//                    }
-//                });
-//
-//
-//                // Optionally add an OnItemClickListener
-//                flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClicked(int itemPosition, Object dataObject) {
-//
-//                        View view = flingContainer.getSelectedView();
-//                        view.findViewById(R.id.background).setAlpha(0);
-//
-//                        Log.d("ONCLICK", "item position " + itemPosition + " clicked");
-//                        //TODO: slideshow expands here into its own activity
-//
-//
-//                        myAppAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//
-//                mProgressView = findViewById(R.id.login_progress);
-//                nomButton = (Button)findViewById(R.id.nom_button);
-//                nomButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (flingContainer.mAdapter != null) {
-//                            Log.d("nomButton", "removing all views");
-//                            flingContainer.removeAllViewsInLayout();
-////                    flingContainer.removeAllViews(); // is this necessary?
-//                            ((MyAppAdapter)flingContainer.mAdapter).removeAll();
-//                            flingContainer.layoutChildren(0, myAppAdapter.getCount());
-//                            flingContainer.setTopView();
-//
-//                        }
-//                        showProgress(true);
-//                        mNomTask = new FetchRestaurantTask();
-//                        mNomTask.execute();
-//                    }
-//                });
-
-//            } catch (Exception e) {
-//                Log.d("debug","Exception in getting session");
-//                e.printStackTrace();
-//            }
-
-//            connection = new JsonHttpUtils(curr.getId());
-
-        }
-//        else {
-//            Log.d("debug", "not really");
-//
-//        }
-
-
-//        al = new ArrayList<>();
-//        al.add(new Data("https://scontent-hkg3-1.cdninstagram.com/t51.2885-15/s750x750/sh0.08/e35/12677601_852746651519262_2112221709_n.jpg", "Chef's Special Pork Chop"));
-//        al.add(new Data("http://i.ytimg.com/vi/PnxsTxV8y3g/maxresdefault.jpg", "Thai House"));
-//        al.add(new Data("http://i.ytimg.com/vi/PnxsTxV8y3g/maxresdefault.jpg", "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness."));
-//        al.add(new Data("http://i.ytimg.com/vi/PnxsTxV8y3g/maxresdefault.jpg", "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness."));
-//        al.add(new Data("http://i.ytimg.com/vi/PnxsTxV8y3g/maxresdefault.jpg", "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness."));
-//        myAppAdapter = new MyAppAdapter(ml, MainActivity.this);
-//        flingContainer.setAdapter(myAppAdapter);
-//        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-//            @Override
-//            public void removeFirstObjectInAdapter() {
-//
-//            }
-//
-//            @Override
-//            public void expandFirstObjectInAdapter() {
-//                // TODO: Animation
-//
-//            }
-//
-//            @Override
-//            public void onLeftCardExit(Object dataObject) {
-//                Log.d("NOPE", al.get(0).getDescription() + " is swiped left");
-//                al.remove(0);
-//                myAppAdapter.notifyDataSetChanged();
-//                //Do something on the left!
-//                //You also have access to the original object.
-//                //If you want to use it just cast it (String) dataObject
-//
-//            }
-//
-//            @Override
-//            public void onRightCardExit(Object dataObject) {
-//
-//                al.remove(0);
-//                myAppAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onAdapterAboutToEmpty(int itemsInAdapter) {
-//
-//            }
-//
-//            @Override
-//            public void onScroll(float scrollProgressPercent) {
-//
-//                View view = flingContainer.getSelectedView();
-//                view.findViewById(R.id.background).setAlpha(0);
-//                view.findViewById(R.id.item_swipe_right_indicator).setAlpha(scrollProgressPercent < 0 ? -scrollProgressPercent : 0);
-//                view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
-//            }
-//        });
-//
-//
-//        // Optionally add an OnItemClickListener
-//        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClicked(int itemPosition, Object dataObject) {
-//
-//                View view = flingContainer.getSelectedView();
-//                view.findViewById(R.id.background).setAlpha(0);
-//
-//                Log.d("ONCLICK", "item position " + itemPosition + " clicked");
-//                //TODO: slideshow expands here into its own activity
-//
-//
-//                myAppAdapter.notifyDataSetChanged();
-//            }
-//        });
-//
-//        mProgressView = findViewById(R.id.login_progress);
-//        nomButton = (Button)findViewById(R.id.nom_button);
-//        nomButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (flingContainer.mAdapter != null) {
-//                    Log.d("nomButton", "removing all views");
-//                    flingContainer.removeAllViewsInLayout();
-////                    flingContainer.removeAllViews(); // is this necessary?
-//                    ((MyAppAdapter)flingContainer.mAdapter).removeAll();
-//                    flingContainer.layoutChildren(0, myAppAdapter.getCount());
-//                    flingContainer.setTopView();
-//
-//                }
-//                showProgress(true);
-//                mNomTask = new FetchRestaurantTask();
-//                mNomTask.execute();
-//            }
-//        });
+    }
 
 
         public void initializeMenuListAdapter() {
@@ -351,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             nomButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    showProgress(true);
                     if (flingContainer.mAdapter != null) {
                         Log.d("nomButton", "removing all views");
                         flingContainer.removeAllViewsInLayout();
@@ -360,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                         flingContainer.setTopView();
 
                     }
-                    showProgress(true);
+//                    showProgress(true);
                     mNomTask = new FetchRestaurantTask();
                     mNomTask.execute();
                 }
@@ -438,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             Log.d("debug", "returns here");
             try {
                 Log.d("debug", curr.getId()+"");
+                ((FooedBarApplication)getApplication()).setSessionID(curr.getId());
                 new FetchMenuItemTask().execute();
 
             } catch (Exception e) {
