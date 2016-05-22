@@ -45,6 +45,10 @@ public class Restaurant implements Serializable {
         this.sessionId = sessionId;
     }
 
+    public String getUrl() {
+        return imageUrl;
+    }
+
     public String getName() {
         return name;
     }

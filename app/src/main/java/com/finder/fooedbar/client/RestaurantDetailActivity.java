@@ -19,10 +19,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
     private static final String TAG = RestaurantDetailActivity.class.getSimpleName();
 
+    private String imageUrl;
     private VrPanoramaView panoWidgetView;
     private Uri fileUri;
     private VrPanoramaView.Options panoOptions = new VrPanoramaView.Options();
@@ -33,6 +35,11 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            imageUrl = extras.getString("URL");
+        }
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         handleIntent(getIntent());
@@ -65,7 +72,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             // Cancel any task from a previous intent sent to this activity.
             backgroundImageLoaderTask.cancel(true);
         }
-        backgroundImageLoaderTask = new ImageLoaderTask();
+        backgroundImageLoaderTask = new ImageLoaderTask(imageUrl);
         backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
     }
 
@@ -95,6 +102,12 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
     class ImageLoaderTask extends AsyncTask<Pair<Uri, VrPanoramaView.Options>, Void, Boolean> {
 
+        private String imageUrl;
+
+        public ImageLoaderTask(String url) {
+            this.imageUrl = url;
+        }
+
         /**
          * Reads the bitmap from disk in the background and waits until it's loaded by pano widget.
          */
@@ -106,7 +119,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     || fileInformation[0] == null || fileInformation[0].first == null) {
                 AssetManager assetManager = getAssets();
                 try {
-                    istr = assetManager.open("andes.jpg"); //FILL ME IN
+                    istr = new URL(imageUrl).openStream();
                     panoOptions = new VrPanoramaView.Options();
                     panoOptions.inputType = VrPanoramaView.Options.TYPE_STEREO_OVER_UNDER;
                 } catch (IOException e) {

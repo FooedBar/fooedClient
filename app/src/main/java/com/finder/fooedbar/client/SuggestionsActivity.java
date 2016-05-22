@@ -36,6 +36,12 @@ public class SuggestionsActivity extends AppCompatActivity{
         restaurants = null;
     }
 
+    void openRestaurant(String url) {
+        Intent intent = new Intent(this, RestaurantDetailActivity.class);
+        intent.putExtra("URL", url);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +62,12 @@ public class SuggestionsActivity extends AppCompatActivity{
             SuggestionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // Sasha & Daniel look here
+                    openRestaurant(restaurants.get(position).getUrl());
                     Log.d("debug", "hello world");
                 }
             });
         }
 
-    }
-
-
-    void openRestaurant() {
-        Intent intent = new Intent(this, RestaurantDetailActivity.class);
-        startActivity(intent);
     }
 
     private class MyListAdaper extends ArrayAdapter<Restaurant> {
@@ -99,7 +99,7 @@ public class SuggestionsActivity extends AppCompatActivity{
                 public void onClick(View v) {
                     Log.d("debug", "restaurant item is clicked");
 //                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
-                    openRestaurant();
+//                    openRestaurant();
                     //Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
                 }
             });
