@@ -2,7 +2,6 @@ package com.finder.fooedbar.client;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Vibrator;
 
 import com.finder.fooedbar.FooedBarApplication;
 import com.finder.fooedbar.R;
@@ -28,8 +28,6 @@ import com.finder.fooedbar.client.api.Restaurant;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -49,7 +47,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private HashMap<String, String> imageStore;
     private MenuSuggestions menSug;
     private int restaurantID;
-    private ListView lv;
+//    private ListView lv;
 
     {
         imageStore = new HashMap<String, String>();
@@ -57,13 +55,14 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         imageStore.put("https://s3-ap-southeast-1.amazonaws.com/ah2016/IMG_3551.JPG", "stadium.jpg");
         imageStore.put("https://s3-ap-southeast-1.amazonaws.com/ah2016/mcdonalds+(2).jpg", "mcdonalds.jpg");
     }
+    private Vibrator v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
 
-        lv = (ListView) findViewById(R.id.curatedMenu);
+//        lv = (ListView) findViewById(R.id.curatedMenu);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -75,6 +74,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
+        panoWidgetView.setEventListener(new ActivityEventListener());
         handleIntent(getIntent());
 
         new FetchMenuTask().execute();
@@ -136,14 +136,12 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
+
     class ImageLoaderTask extends AsyncTask<Pair<Uri, VrPanoramaView.Options>, Void, Boolean> {
-
         private String imageUrl;
-
         public ImageLoaderTask(String url) {
             this.imageUrl = url;
         }
-
         /**
          * Reads the bitmap from disk in the background and waits until it's loaded by pano widget.
          */
@@ -151,27 +149,14 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         protected Boolean doInBackground(Pair<Uri, VrPanoramaView.Options>... fileInformation) {
             VrPanoramaView.Options panoOptions = null;  // It's safe to use null VrPanoramaView.Options.
             InputStream istr = null;
-            if (fileInformation == null || fileInformation.length < 1
-                    || fileInformation[0] == null || fileInformation[0].first == null) {
-                AssetManager assetManager = getAssets();
-                try {
-//                    istr = assetManager.open(imageStore.get(imageUrl));
-                    Log.d("res", "url: "+imageUrl+ " Restaurant"+restaurantID);
-                    istr = new URL(imageUrl).openStream();
-                    panoOptions = new VrPanoramaView.Options();
-                    panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
-                } catch (IOException e) {
-                    Log.e(TAG, "Could not decode default bitmap: " + e);
-                    return false;
-                }
-            } else {
-                try {
-                    istr = new FileInputStream(new File(fileInformation[0].first.getPath()));
-                    panoOptions = fileInformation[0].second;
-                } catch (IOException e) {
-                    Log.e(TAG, "Could not load file: " + e);
-                    return false;
-                }
+            try {
+                istr = new URL(imageUrl).openStream();
+//                istr = new URL("http://viewer.spherecast.org/photosphere.jpg").openStream();
+                panoOptions = new VrPanoramaView.Options();
+                panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not decode default bitmap: " + e);
+                return false;
             }
             panoWidgetView.loadImageFromBitmap(BitmapFactory.decodeStream(istr), panoOptions);
             try {
@@ -179,7 +164,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.e(TAG, "Could not close input stream: " + e);
             }
-
             return true;
         }
     }
@@ -208,13 +192,16 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             if (success) {
                 try {
                     Log.d("debug", "loadBegin");
+                    final ListView lv = (ListView) findViewById(R.id.curatedMenu);
                     lv.setAdapter(new MyMenuAdapter(getApplicationContext(), R.layout.restaurant_list_item, menSug.getCuratedMenu()));
+                    Log.d("adapter layout", lv.getAdapter().getCount()+"");
                     Log.d("debug", "loadSuccess");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
+
         private class MyMenuAdapter extends ArrayAdapter<MenuItem> {
             private int layout;
             private List<MenuItem> mObjects;
@@ -285,6 +272,14 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     RestaurantDetailActivity.this, "Error loading pano: " + errorMessage, Toast.LENGTH_LONG)
                     .show();
             Log.e(TAG, "Error loading pano: " + errorMessage);
+        }
+
+        @Override
+        public void onClick() {
+            v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(500);
+            Log.d("debug", "clicked");
+            onBackPressed();
         }
     }
 }
