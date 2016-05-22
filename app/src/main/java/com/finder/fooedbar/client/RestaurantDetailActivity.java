@@ -115,25 +115,14 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         protected Boolean doInBackground(Pair<Uri, VrPanoramaView.Options>... fileInformation) {
             VrPanoramaView.Options panoOptions = null;  // It's safe to use null VrPanoramaView.Options.
             InputStream istr = null;
-            if (fileInformation == null || fileInformation.length < 1
-                    || fileInformation[0] == null || fileInformation[0].first == null) {
-                AssetManager assetManager = getAssets();
-                try {
-                    istr = new URL(imageUrl).openStream();
-                    panoOptions = new VrPanoramaView.Options();
-                    panoOptions.inputType = VrPanoramaView.Options.TYPE_STEREO_OVER_UNDER;
-                } catch (IOException e) {
-                    Log.e(TAG, "Could not decode default bitmap: " + e);
-                    return false;
-                }
-            } else {
-                try {
-                    istr = new FileInputStream(new File(fileInformation[0].first.getPath()));
-                    panoOptions = fileInformation[0].second;
-                } catch (IOException e) {
-                    Log.e(TAG, "Could not load file: " + e);
-                    return false;
-                }
+            try {
+              istr = new URL(imageUrl).openStream();
+//                istr = new URL("http://viewer.spherecast.org/photosphere.jpg").openStream();
+                panoOptions = new VrPanoramaView.Options();
+                panoOptions.inputType = VrPanoramaView.Options.TYPE_STEREO_OVER_UNDER;
+            } catch (IOException e) {
+                Log.e(TAG, "Could not decode default bitmap: " + e);
+                return false;
             }
             panoWidgetView.loadImageFromBitmap(BitmapFactory.decodeStream(istr), panoOptions);
             try {
