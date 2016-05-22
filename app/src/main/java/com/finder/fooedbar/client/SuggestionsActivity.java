@@ -1,6 +1,7 @@
 package com.finder.fooedbar.client;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -63,6 +64,12 @@ public class SuggestionsActivity extends AppCompatActivity{
 
     }
 
+
+    void openRestaurant() {
+        Intent intent = new Intent(this, RestaurantDetailActivity.class);
+        startActivity(intent);
+    }
+
     private class MyListAdaper extends ArrayAdapter<Restaurant> {
         private int layout;
         private List<Restaurant> mObjects;
@@ -91,7 +98,9 @@ public class SuggestionsActivity extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     Log.d("debug", "restaurant item is clicked");
-                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
+                    openRestaurant();
+                    //Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
                 }
             });
             String str = getItem((position)).getName();

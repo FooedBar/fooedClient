@@ -137,9 +137,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
      * Listen to the important events from widget.
      */
     private class ActivityEventListener extends VrPanoramaEventListener {
-        /**
-         * Called by pano widget on the UI thread when it's done loading the image.
-         */
         @Override
         public void onLoadSuccess() {
             loadImageSuccessful = true;
