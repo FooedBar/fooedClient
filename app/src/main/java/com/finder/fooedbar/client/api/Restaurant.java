@@ -45,6 +45,15 @@ public class Restaurant implements Serializable {
         this.sessionId = sessionId;
     }
 
+    public static boolean isValidId(String id) {
+        try {
+            int num = Integer.parseInt(id);
+            return true;
+        } catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
     public String getUrl() {
         return imageUrl;
     }

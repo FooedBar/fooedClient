@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,7 +21,6 @@ import android.os.Vibrator;
 
 import com.finder.fooedbar.FooedBarApplication;
 import com.finder.fooedbar.R;
-import com.finder.fooedbar.client.api.MenuItem;
 import com.finder.fooedbar.client.api.MenuSuggestions;
 import com.finder.fooedbar.client.api.Restaurant;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
@@ -34,6 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
     private static final String TAG = RestaurantDetailActivity.class.getSimpleName();
@@ -62,8 +61,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
 
-//        lv = (ListView) findViewById(R.id.curatedMenu);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             imageUrl = extras.getString("URL");
@@ -76,9 +73,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
         handleIntent(getIntent());
-
-        new FetchMenuTask().execute();
-
     }
 
     @Override
@@ -89,21 +83,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            fileUri = intent.getData();
-            if (fileUri == null) {
-                Log.w(TAG, "No data uri specified. Use \"-d /path/filename\".");
-            } else {
-                Log.i(TAG, "Using file " + fileUri.toString());
-            }
-
-            panoOptions.inputType = intent.getIntExtra("inputType", VrPanoramaView.Options.TYPE_MONO);
-            Log.i(TAG, "Options.inputType = " + panoOptions.inputType);
-        } else {
-            Log.i(TAG, "Intent is not ACTION_VIEW. Using default pano image.");
-            fileUri = null;
-            panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
-        }
         if (backgroundImageLoaderTask != null) {
             // Cancel any task from a previous intent sent to this activity.
             backgroundImageLoaderTask.cancel(true);
@@ -166,91 +145,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             }
             return true;
         }
-    }
-
-    class FetchMenuTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                Log.d("resID", restaurantID+"");
-                menSug = new MenuSuggestions(((FooedBarApplication)getApplication()).getSessionID(),  restaurantID);
-                menSug.getMenuSuggestions();
-                Log.d("ASYNC", "running inside FetchRestaurantTask");
-                return true;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                return false;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            if (success) {
-                try {
-                    Log.d("debug", "loadBegin");
-                    final ListView lv = (ListView) findViewById(R.id.curatedMenu);
-                    lv.setAdapter(new MyMenuAdapter(getApplicationContext(), R.layout.restaurant_list_item, menSug.getCuratedMenu()));
-                    Log.d("adapter layout", lv.getAdapter().getCount()+"");
-                    Log.d("debug", "loadSuccess");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        private class MyMenuAdapter extends ArrayAdapter<MenuItem> {
-            private int layout;
-            private List<MenuItem> mObjects;
-
-            private MyMenuAdapter(Context context, int resource, List<MenuItem> objects) {
-                super(context, resource, objects);
-
-                mObjects = objects;
-                layout = resource;
-            }
-
-            @Override
-            public View getView(final int position, View convertView, ViewGroup parent) {
-                ViewHolder mainViewholder = null;
-
-                if (convertView == null) {
-                    LayoutInflater inflater = LayoutInflater.from(getContext());
-                    convertView = inflater.inflate(layout, parent, false);
-                    ViewHolder viewHolder = new ViewHolder();
-                    viewHolder.title = (TextView) convertView.findViewById(R.id.list_item_title);
-                    viewHolder.button = (ImageButton) convertView.findViewById(R.id.list_item_btn_right);
-                    convertView.setTag(viewHolder);
-                }
-                mainViewholder = (ViewHolder) convertView.getTag();
-                mainViewholder.button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("debug", "restaurant item is clicked");
-//                    Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
-//                    openRestaurant();
-                        //Toast.makeText(getContext(), "Button was clicked for list item " + position, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                String str = getItem((position)).getName();
-                String[] split = str.split("\\*");
-                String eventName = split[0];
-                mainViewholder.title.setText(eventName);
-                return convertView;
-            }
-
-            public class ViewHolder {
-
-                TextView title;
-                ImageButton button;
-            }
-
-
-        }
-
     }
 
     /**

@@ -11,37 +11,16 @@
         android:layout_height="50dp"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:title="Restaurant List"
+        android:title="Our Recommendations"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/trending_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Our Recommendations"
-        android:layout_margin="10dp"
-        android:textStyle="bold"
-        android:fontFamily="Myriad Pro"
-        android:shadowColor="@android:color/darker_gray"
-        android:background="@color/colorPrimary"
-        android:layout_below="@id/qr_bar"
-        android:textSize="20dp"/>
-
 
     <ListView
         android:id="@+id/mylist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_below="@id/trending_title"
+        android:layout_below="@id/qr_bar"
         android:background="#FFFFFF">
     </ListView>
 

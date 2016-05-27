@@ -10,13 +10,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * Created by svarlamov on 21/5/2016.
- */
-
 public class JsonHttpUtils {
-    private final String baseApiUrl = "http://52.32.33.211:3000/";
-    private String sessionId = "";
+    private final String baseApiUrl = "http://192.168.0.100:3000/";
+    private String sessionId = "1";
     private final OkHttpClient client = new OkHttpClient();
     private MediaType jsonType = MediaType.parse("application/json");
 

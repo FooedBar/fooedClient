@@ -1,5 +1,6 @@
 package com.finder.fooedbar.client;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,13 +24,16 @@ import com.finder.fooedbar.client.api.Restaurant;
 import java.util.ArrayList;
 import java.util.List;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
 /**
  * Created by jasonlin on 5/21/16.
  * There are two ways of defining this restaurant: one to create a list view
  * Or, if we have time, we create a VR unity scene
  */
 
-
+@RuntimePermissions
 public class RestaurantSuggestionsActivity extends AppCompatActivity{
 
     private ArrayList<Restaurant> restaurants;
@@ -49,8 +53,7 @@ public class RestaurantSuggestionsActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.qr_toggle) {
-            Intent intent = new Intent(this, QrActivity.class);
-            startActivity(intent);
+            getCameraPermission();
             return true;
         }
         return false;
@@ -60,6 +63,19 @@ public class RestaurantSuggestionsActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.qr_menu, menu);
         return true;
+    }
+
+    @NeedsPermission(Manifest.permission.CAMERA)
+    public void getCameraPermission() {
+        Intent intent = new Intent(this, QrActivity.class);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        RestaurantSuggestionsActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @Override
@@ -86,7 +102,6 @@ public class RestaurantSuggestionsActivity extends AppCompatActivity{
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     openRestaurant(restaurants.get(position).getUrl(), restaurants.get(position).getID(), restaurants.get(position).getName());
-                    Log.d("debug", "hello world");
                 }
             });
         }
