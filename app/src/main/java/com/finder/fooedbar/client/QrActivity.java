@@ -140,7 +140,6 @@ public class QrActivity extends AppCompatActivity {
                 intent.putExtra("restaurant_id", restaurantId);
                 intent.putExtra("restaurant_name", name);
                 startActivity(intent);
-                finish();
             }
         }
     }

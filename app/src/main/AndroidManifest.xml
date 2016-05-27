@@ -42,13 +42,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="barcode"/>
-        <activity android:name=".client.SplashActivity">
+        <activity android:name=".client.SplashActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".client.MainActivity">
+        <activity android:name=".client.MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <category android:name="com.google.intent.category.CARDBOARD" />
             </intent-filter>
