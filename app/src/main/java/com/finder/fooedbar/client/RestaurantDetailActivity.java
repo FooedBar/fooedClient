@@ -9,12 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Vibrator;
@@ -22,19 +16,22 @@ import android.os.Vibrator;
 import com.finder.fooedbar.FooedBarApplication;
 import com.finder.fooedbar.R;
 import com.finder.fooedbar.client.api.MenuSuggestions;
-import com.finder.fooedbar.client.api.Restaurant;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.zip.Inflater;
 
-public class RestaurantDetailActivity extends AppCompatActivity {
+
+public class RestaurantDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = RestaurantDetailActivity.class.getSimpleName();
 
     private String imageUrl;
@@ -45,7 +42,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private boolean loadImageSuccessful;
     private HashMap<String, String> imageStore;
     private MenuSuggestions menSug;
+    private LatLng restaurantCoords;
     private int restaurantID;
+    private GoogleMap map;
 //    private ListView lv;
 
     {
@@ -65,6 +64,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         if (extras != null) {
             imageUrl = extras.getString("URL");
             restaurantID = extras.getInt("ID");
+            restaurantCoords = new LatLng(extras.getDoubleArray("COORDS")[0], extras.getDoubleArray("COORDS")[1]);
 
             TextView restaurantName = (TextView) findViewById(R.id.restaurant_name);
             restaurantName.setText(extras.getString("NAME"));
@@ -73,6 +73,11 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
         handleIntent(getIntent());
+
+        //Gmaps
+        Log.d("debug map",  getFragmentManager().findFragmentById(R.id.map).toString());
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -114,6 +119,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             backgroundImageLoaderTask.cancel(true);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurantCoords, 10));
+        map.addMarker(new MarkerOptions().position(restaurantCoords));
     }
 
     class ImageLoaderTask extends AsyncTask<Pair<Uri, VrPanoramaView.Options>, Void, Boolean> {

@@ -27,7 +27,8 @@ public class RestaurantSuggestions {
             this.restaurants.add(new Restaurant(obj.getInt("id"),
                     obj.getString("name"), obj.getString("description"),
                     obj.getString("style"), obj.getString("imageUrl"),
-                    obj.getInt("imageHeight"), obj.getInt("imageWidth"), this.sessionId));
+                    obj.getInt("imageHeight"), obj.getInt("imageWidth"), this.sessionId,
+                    new double[]{obj.getDouble("lat"), obj.getDouble("long")}));
         }
     }
 

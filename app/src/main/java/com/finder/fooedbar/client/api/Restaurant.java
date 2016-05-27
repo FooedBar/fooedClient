@@ -20,6 +20,7 @@ public class Restaurant implements Serializable {
     private int imageHeight;
     private int imageWidth;
     private int sessionId;
+    private double[] location;
 
     public Restaurant(int id, int sessionId) throws Exception {
         JsonHttpUtils utils = new JsonHttpUtils(sessionId);
@@ -32,9 +33,10 @@ public class Restaurant implements Serializable {
         this.imageUrl = obj.getString("imageUrl");
         this.imageHeight = obj.getInt("imageHeight");
         this.imageWidth = obj.getInt("imageWidth");
+        this.location = new double[]{obj.getDouble("lat"), obj.getDouble("long")};
     }
 
-    public Restaurant(int id, String name, String description, String style, String imageUrl, int imageHeight, int imageWidth, int sessionId) {
+    public Restaurant(int id, String name, String description, String style, String imageUrl, int imageHeight, int imageWidth, int sessionId, double[] location) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,6 +45,7 @@ public class Restaurant implements Serializable {
         this.imageUrl = imageUrl;
         this.imageWidth = imageWidth;
         this.sessionId = sessionId;
+        this.location = location;
     }
 
     public static boolean isValidId(String id) {
@@ -65,4 +68,6 @@ public class Restaurant implements Serializable {
     public int getID() {
         return id;
     }
+
+    public double[] getLoc() { return location; }
 }

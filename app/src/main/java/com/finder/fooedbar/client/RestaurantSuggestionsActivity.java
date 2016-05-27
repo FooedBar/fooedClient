@@ -42,11 +42,12 @@ public class RestaurantSuggestionsActivity extends AppCompatActivity{
         restaurants = null;
     }
 
-    void openRestaurant(String url, int resID, String resName) {
+    void openRestaurant(String url, int resID, String resName, double[] location) {
         Intent intent = new Intent(this, RestaurantDetailActivity.class);
         intent.putExtra("URL", url);
         intent.putExtra("ID", resID);
         intent.putExtra("NAME", resName);
+        intent.putExtra("COORDS", location);
         startActivity(intent);
     }
 
@@ -101,7 +102,7 @@ public class RestaurantSuggestionsActivity extends AppCompatActivity{
             SuggestionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    openRestaurant(restaurants.get(position).getUrl(), restaurants.get(position).getID(), restaurants.get(position).getName());
+                    openRestaurant(restaurants.get(position).getUrl(), restaurants.get(position).getID(), restaurants.get(position).getName(), restaurants.get(position).getLoc());
                 }
             });
         }
